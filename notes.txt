@@ -1,0 +1,26 @@
+command-line arguments(elements in the array are delimited by commas):
+
+-search-user-id [IDs]
+-search-movie-id <ID>
+-search-movie-title <TITLE>
+-search-genre [GENREs]
+-search-year <YEAR>
+
+-list-movies-rating <topN>
+-list-movies-watches <topN>
+
+-find-favourite-genre [IDs]: search user by id, e.g., main.py -s 1,2,15,6 (delimited by commas)
+-compare-movie-tastes [ID1, ID2]
+
+----------------------------------------------------------------------------
+E.g.,
+
+spark-submit main.py -search-user-id 1,2,3,54 -list-movies-rating 3
+spark-submit main.py -search-user-id 1,2,3,54 -list-movies-rating 3 -list-movies-rating 5
+
+----------------------------------------------------------------------------
+
+* The implementation is capable of processing multiple arguments
+
+
+
