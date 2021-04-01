@@ -4,7 +4,7 @@
     <option name="archives">
       <list />
     </option>
-    <option name="artifactArgs" value="" />
+    <option name="artifactArgs" value="-search-user-id asdf" />
     <option name="artifactPath">
       <FilePath>
         <option name="path" value="$PROJECT_DIR$/src/main.py" />
