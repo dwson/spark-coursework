@@ -7,6 +7,7 @@
       <excludeFolder url="file://$MODULE_DIR$/spark-3.1.1-bin-hadoop3.2/python/pyspark.egg-info" />
       <excludeFolder url="file://$MODULE_DIR$/ml-latest" />
       <excludeFolder url="file://$MODULE_DIR$/ml-latest-small" />
+      <excludeFolder url="file://$MODULE_DIR$/output" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
