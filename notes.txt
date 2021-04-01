@@ -6,10 +6,10 @@ command-line arguments(elements in the array are delimited by commas):
 -search-genre [GENREs]
 -search-year <YEAR>
 
--list-movies-rating <topN>
--list-movies-watches <topN>
+-list-rating <topN>
+-list-watches <topN>
 
--find-favourite-genre [IDs]: search user by id, e.g., main.py -s 1,2,15,6 (delimited by commas)
+-find-favourite-genre [IDs]
 -compare-movie-tastes [ID1, ID2]
 
 ----------------------------------------------------------------------------
