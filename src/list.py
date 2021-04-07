@@ -7,7 +7,8 @@ from pyspark.sql.functions import col
 # movie rating is calculated by adding all ratings from ratings.csv.
 # return the dataset
 def list_movies_by_rating(dataset_path: str, n: int):
-    spark_session = SparkSession.builder.master("local").appName("App").getOrCreate()
+    # set local[*] to utilize all cores
+    spark_session = SparkSession.builder.master("local[*]").appName("App").getOrCreate()
 
     ratings_dataset = spark_session.read.options(header='True').csv(dataset_path + "ratings.csv")
     movies_dataset = spark_session.read.options(header='True').csv(dataset_path + "movies.csv")
