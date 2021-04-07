@@ -24,7 +24,7 @@ USAGE = "spark-submit main.py "
 # e.g., 01.04.2021-19:42:28 -search-user-id 1,2,3
 def store_dataset(dataset, filename):
     file_path = OUTPUT_PATH + datetime.today().strftime("%d.%m.%Y-%H:%M:%S-") + filename
-    dataset.write.option('header', 'true').csv(file_path)
+    dataset.write.option("header", "true").csv(file_path)
     print("Result saved in " + file_path)
 
 
@@ -46,25 +46,25 @@ def main():
         if value is not None:
             print("Argument:", arg, value)
 
-            if 'search_user_id' in arg:
+            if "search_user_id" in arg:
                 None  # TODO
-            elif 'search_movie_id' in arg:
+            elif "search_movie_id" in arg:
                 None  # TODO
-            elif 'search_movie_title' in arg:
+            elif "search_movie_title" in arg:
                 None  # TODO
-            elif 'search_genre' in arg:
+            elif "search_genre" in arg:
                 None  # TODO
-            elif 'search_year' in arg:
+            elif "search_year" in arg:
                 None  # TODO
-            elif 'list_rating' in arg:
+            elif "list_rating" in arg:
                 try:
                     result = part1.list_movies_by_rating(DATASET_PATH, int(value))
                     result.show(truncate=False)
-                    store_dataset(result, arg + "-" + value)
+                    store_dataset(result, arg + '-' + value)
                 except ValueError:
                     print("The value must be a number: ", value)
                     print("e.g., -list-rating 10")
-            elif 'list_watches' in arg:
+            elif "list_watches" in arg:
                 try:
                     result = part1.list_movies_by_watches(DATASET_PATH, int(value))
                     result.show(truncate=False)
@@ -72,14 +72,20 @@ def main():
                 except ValueError:
                     print("The value must be a number: ", value)
                     print("e.g., -list-watches 10")
-            elif 'find_favourite_genre' in arg:
+            elif "find_favourite_genre" in arg:
                 None  # TODO
-            elif 'compare_movie_tastes' in arg:
+            elif "compare_movie_tastes" in arg:
                 try:
+                    users = value.split(',')
 
-                    result = part2.compare_movie_tastes()
-                    result.show(truncate=False)
-                    store_dataset(result, arg + "-" + value)
+                    # type check
+                    if len(users) == 2 and int(users[0]) and int(users[1]):
+                        # result = part2.compare_movie_tastes(DATASET_PATH, users)
+                        # result.show(truncate=False)
+                        # store_dataset(result, arg + '-' + value)
+                        print("success")
+                    else:
+                        raise ValueError
                 except ValueError:
                     print("The value must be two numbers separated by a comma: ", value)
                     print("e.g., -compare-movie-tastes 1,2")
