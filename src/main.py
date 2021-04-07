@@ -9,8 +9,8 @@ from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
 from datetime import datetime
 
-DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest/" # large one
-# DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest-small/"  # small one
+# DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest/" # large one
+DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest-small/"  # small one
 OUTPUT_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../output/"
 
 AVAILABLE_ARGS = ["-search-user-id", "-search-movie-id", "-search-movie-title", "-search-genre", "-search-year",
@@ -35,13 +35,6 @@ def main():
 
     args = parser.parse_args()
 
-    # starter code
-    # conf = SparkConf().setMaster("local").setAppName("App")
-    # sc = SparkContext(conf=conf)
-    # lines = sc.textFile(ML_LATEST_SMALL_PATH + "links.csv")  # Create an RDD called lines
-    # print(lines.count())  # Count the number of items in this RDD
-    # print(lines.first())  # 1st item in RDD, i.e. 1st line of README.md
-
     # we've decided to use SparkSession instead of SparkContext because it's newer and supports more methods
     # spark_session = SparkSession.builder.master("local").appName("App").getOrCreate()
     # dataset = spark_session.read.csv(DATASET_PATH + "links.csv")
@@ -50,7 +43,7 @@ def main():
         value = getattr(args, arg)
 
         if value is not None:
-            print("Found -", arg, " ", value)
+            print("Argument: ", arg, " ", value)
 
             if 'search_user_id' in arg:
                 None  # TODO
@@ -70,7 +63,12 @@ def main():
                 except ValueError:
                     print("The value must be a number: ", value)
             elif 'list_watches' in arg:
-                None  # Todo
+                try:
+                    result = list.list_movies_by_watches(DATASET_PATH, int(value))
+                    result.show(truncate=False)
+                    store_dataset(result, arg + "-" + value)
+                except ValueError:
+                    print("The value must be a number: ", value)
             elif 'find_favourite_genre' in arg:
                 None  # TODO
             elif 'compare_movie_tastes' in arg:

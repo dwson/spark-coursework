@@ -16,18 +16,32 @@ def list_movies_by_rating(dataset_path: str, n: int):
     # cast String type column 'rating' to integer type for calculation
     ratings_dataset = ratings_dataset.withColumn("rating", ratings_dataset["rating"].cast("int"))
 
-    joined_dataset = ratings_dataset.groupBy("movieId") \
+    result = ratings_dataset.groupBy("movieId") \
         .sum("rating") \
         .join(movies_dataset, ratings_dataset["movieId"] == movies_dataset["movieId"])
 
-    joined_dataset = joined_dataset.sort(joined_dataset["sum(rating)"].desc()) \
+    result = result.sort(result["sum(rating)"].desc()) \
         .limit(n)
 
-    return joined_dataset.select(col("title"), col("sum(rating)"))
+    return result.select(col("title"), col("sum(rating)"))
 
 
+# number of watches = count(movieId) from ratings.csv
 def list_movies_by_watches(dataset_path: str, n: int):
-    spark_session = SparkSession.builder.master("local").appName("App").getOrCreate()
-    dataset = spark_session.read.csv(dataset_path + "links.csv")
+    # set local[*] to utilize all cores
+    spark_session = SparkSession.builder.master("local[*]").appName("App").getOrCreate()
 
-    return dataset
+    ratings_dataset = spark_session.read.options(header='True').csv(dataset_path + "ratings.csv")
+    movies_dataset = spark_session.read.options(header='True').csv(dataset_path + "movies.csv")
+
+    # cast String type column 'rating' to integer type for calculation
+    ratings_dataset = ratings_dataset.withColumn("rating", ratings_dataset["rating"].cast("int"))
+
+    result = ratings_dataset.groupBy("movieId") \
+        .count() \
+        .join(movies_dataset, ratings_dataset["movieId"] == movies_dataset["movieId"])
+
+    result = result.sort(result["count"].desc()) \
+        .limit(n)
+
+    return result.select(col("title"), col("count"))
