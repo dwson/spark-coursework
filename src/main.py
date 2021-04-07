@@ -3,7 +3,7 @@
 # ../spark-3.1.1-bin-hadoop3.2/bin/spark-submit main.py
 import argparse
 import os
-import list
+import part1
 
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
@@ -57,14 +57,14 @@ def main():
                 None  # TODO
             elif 'list_rating' in arg:
                 try:
-                    result = list.list_movies_by_rating(DATASET_PATH, int(value))
+                    result = part1.list_movies_by_rating(DATASET_PATH, int(value))
                     result.show(truncate=False)
                     store_dataset(result, arg + "-" + value)
                 except ValueError:
                     print("The value must be a number: ", value)
             elif 'list_watches' in arg:
                 try:
-                    result = list.list_movies_by_watches(DATASET_PATH, int(value))
+                    result = part1.list_movies_by_watches(DATASET_PATH, int(value))
                     result.show(truncate=False)
                     store_dataset(result, arg + "-" + value)
                 except ValueError:
