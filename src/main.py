@@ -1,6 +1,4 @@
 #!/usr/bin/python
-# how to run this on command line?
-# ../spark-3.1.1-bin-hadoop3.2/bin/spark-submit main.py
 import argparse
 import os
 import part1
@@ -17,7 +15,7 @@ OUTPUT_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../output/"
 AVAILABLE_ARGS = ["-search-user-id", "-search-movie-id", "-search-movie-title", "-search-genre", "-search-year",
                   "-list-rating", "-list-watches", "-find-favourite-genre", "-compare-movie-tastes"]
 
-USAGE = "spark-submit main.py "
+USAGE = "spark-submit main.py {[OPTIONS] <value>}"
 
 
 # Store a given dataset into OUTPUT_PATH with a current timestamp
@@ -29,10 +27,12 @@ def store_dataset(dataset, filename):
 
 
 def is_every_element_int(var):
-    for element in var:
-        if type(element) is not int:
-            return False
-    return True
+    try:
+        for element in var:
+            int(element)
+        return True
+    except ValueError:
+        return False
 
 
 def main():
@@ -88,8 +88,10 @@ def main():
                     # type check
                     if len(users) == 2 and is_every_element_int(users):
                         result = part2.compare_movie_tastes(DATASET_PATH, users)
-                        result.show(truncate=False)
-                        store_dataset(result, arg + '-' + value)
+
+                        if result is not None:
+                            result.show(truncate=True)  # TODO come up with better presentation
+                            store_dataset(result, arg + '-' + value)
                     else:
                         raise ValueError
                 except ValueError:

@@ -4,7 +4,7 @@
     <option name="archives">
       <list />
     </option>
-    <option name="artifactArgs" value="-compare-movie-tastes 1,3,5" />
+    <option name="artifactArgs" value="-compare-movie-tastes 125,161" />
     <option name="artifactPath">
       <FilePath>
         <option name="path" value="$PROJECT_DIR$/src/main.py" />
