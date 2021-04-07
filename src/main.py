@@ -4,6 +4,7 @@
 import argparse
 import os
 import part1
+import part2
 
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
@@ -43,7 +44,7 @@ def main():
         value = getattr(args, arg)
 
         if value is not None:
-            print("Argument: ", arg, " ", value)
+            print("Argument:", arg, value)
 
             if 'search_user_id' in arg:
                 None  # TODO
@@ -62,6 +63,7 @@ def main():
                     store_dataset(result, arg + "-" + value)
                 except ValueError:
                     print("The value must be a number: ", value)
+                    print("e.g., -list-rating 10")
             elif 'list_watches' in arg:
                 try:
                     result = part1.list_movies_by_watches(DATASET_PATH, int(value))
@@ -69,10 +71,18 @@ def main():
                     store_dataset(result, arg + "-" + value)
                 except ValueError:
                     print("The value must be a number: ", value)
+                    print("e.g., -list-watches 10")
             elif 'find_favourite_genre' in arg:
                 None  # TODO
             elif 'compare_movie_tastes' in arg:
-                None  # TODO
+                try:
+
+                    result = part2.compare_movie_tastes()
+                    result.show(truncate=False)
+                    store_dataset(result, arg + "-" + value)
+                except ValueError:
+                    print("The value must be two numbers separated by a comma: ", value)
+                    print("e.g., -compare-movie-tastes 1,2")
 
 
 if __name__ == "__main__":
