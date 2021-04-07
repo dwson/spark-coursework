@@ -28,6 +28,13 @@ def store_dataset(dataset, filename):
     print("Result saved in " + file_path)
 
 
+def is_every_element_int(var):
+    for element in var:
+        if type(element) is not int:
+            return False
+    return True
+
+
 def main():
     parser = argparse.ArgumentParser(usage=USAGE)
 
@@ -62,7 +69,7 @@ def main():
                     result.show(truncate=False)
                     store_dataset(result, arg + '-' + value)
                 except ValueError:
-                    print("The value must be a number: ", value)
+                    print("The value must be a number:", value)
                     print("e.g., -list-rating 10")
             elif "list_watches" in arg:
                 try:
@@ -70,7 +77,7 @@ def main():
                     result.show(truncate=False)
                     store_dataset(result, arg + "-" + value)
                 except ValueError:
-                    print("The value must be a number: ", value)
+                    print("The value must be a number:", value)
                     print("e.g., -list-watches 10")
             elif "find_favourite_genre" in arg:
                 None  # TODO
@@ -79,15 +86,14 @@ def main():
                     users = value.split(',')
 
                     # type check
-                    if len(users) == 2 and int(users[0]) and int(users[1]):
-                        # result = part2.compare_movie_tastes(DATASET_PATH, users)
-                        # result.show(truncate=False)
-                        # store_dataset(result, arg + '-' + value)
-                        print("success")
+                    if len(users) == 2 and is_every_element_int(users):
+                        result = part2.compare_movie_tastes(DATASET_PATH, users)
+                        result.show(truncate=False)
+                        store_dataset(result, arg + '-' + value)
                     else:
                         raise ValueError
                 except ValueError:
-                    print("The value must be two numbers separated by a comma: ", value)
+                    print("The value must be two numbers separated by a comma:", value)
                     print("e.g., -compare-movie-tastes 1,2")
 
 
