@@ -1,12 +1,34 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col
 from pyspark.sql.functions import concat_ws
 from pyspark.sql.functions import collect_list
+from pyspark.sql.functions import col, explode, split, avg, count, round
 
 
 def find_favourite_genre(dataset_path: str, users: list):
     # set local[*] to utilize all cores
     spark_session = SparkSession.builder.master("local[*]").appName("App").getOrCreate()
+
+    ratings_dataset = spark_session.read.options(header='True').csv(dataset_path + "ratings.csv")
+    movies_dataset = spark_session.read.options(header='True').csv(dataset_path + "movies.csv")
+
+    # filter dataset to get watched movie data of requested users and count the number of movies
+    ratings_of_the_users = ratings_dataset.select("userId", "movieId").filter(col("userId").isin(users))
+
+    # split genres of each movie
+    genres_dataset = movies_dataset.select("movieId", "genres") \
+        .withColumn("genres", explode(split(col("genres"), "\\|")))
+
+    # filter unselected movies
+    genres_dataset = genres_dataset.join(ratings_of_the_users,
+                                         genres_dataset["movieId"] == ratings_of_the_users["movieId"],
+                                         "leftsemi") \
+        .groupBy("genres") \
+        .count()
+
+    max_appearance_count = genres_dataset.sort(genres_dataset["count"].desc()).first()["count"]
+    favourite_genres_dataset = genres_dataset.where(col("count") == max_appearance_count)
+
+    return favourite_genres_dataset
 
 
 def compare_movie_tastes(dataset_path: str, users: list):
