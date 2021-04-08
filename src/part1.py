@@ -87,8 +87,8 @@ def list_movies_by_rating(dataset_path: str, n: int):
     ratings_dataset = spark_session.read.options(header='True').csv(dataset_path + "ratings.csv")
     movies_dataset = spark_session.read.options(header='True').csv(dataset_path + "movies.csv")
 
-    # cast String type column 'rating' to integer type for calculation
-    ratings_dataset = ratings_dataset.withColumn("rating", ratings_dataset["rating"].cast("int"))
+    # cast String type column 'rating' to double type for calculation
+    ratings_dataset = ratings_dataset.withColumn("rating", ratings_dataset["rating"].cast("double"))
 
     result = ratings_dataset.groupBy("movieId") \
         .sum("rating") \
@@ -108,8 +108,8 @@ def list_movies_by_watches(dataset_path: str, n: int):
     ratings_dataset = spark_session.read.options(header='True').csv(dataset_path + "ratings.csv")
     movies_dataset = spark_session.read.options(header='True').csv(dataset_path + "movies.csv")
 
-    # cast String type column 'rating' to integer type for calculation
-    ratings_dataset = ratings_dataset.withColumn("rating", ratings_dataset["rating"].cast("int"))
+    # cast String type column 'rating' to double type for calculation
+    ratings_dataset = ratings_dataset.withColumn("rating", ratings_dataset["rating"].cast("double"))
 
     result = ratings_dataset.groupBy("movieId") \
         .count() \
