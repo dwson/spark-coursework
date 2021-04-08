@@ -68,7 +68,13 @@ def main():
                     print("The value must be one or more numbers separated by a comma:", value)
                     print("e.g., -search-user-id 1,2,5")
             elif "search_movie_id" in arg:
-                None  # TODO
+                try:
+                    result = part1.search_movie_by_id(DATASET_PATH, int(value))
+                    result.show(truncate=False)
+                    store_dataset(result, arg + '-' + value)
+                except ValueError:
+                    print("The value must be a number:", value)
+                    print("e.g., -search-movie-id 10")
             elif "search_movie_title" in arg:
                 None  # TODO
             elif "search_genre" in arg:
