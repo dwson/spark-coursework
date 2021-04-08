@@ -90,7 +90,7 @@ def main():
                         result = part2.compare_movie_tastes(DATASET_PATH, users)
 
                         if result is not None:
-                            result.show(truncate=True)  # TODO come up with better presentation
+                            result.show(truncate=False)
                             store_dataset(result, arg + '-' + value)
                     else:
                         raise ValueError
