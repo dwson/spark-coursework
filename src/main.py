@@ -95,8 +95,7 @@ def main():
                     for i in range(len(list_of_genre)):
                         print("Genre: ", list_of_genre[i])
                         dataset_by_genre[i].show(truncate=False)
-                        # TODO: is storing without genre ok?
-                        store_dataset(dataset_by_genre[i], arg + '-' + value)
+                        store_dataset(dataset_by_genre[i], arg + '-' + value + " (" + list_of_genre[i] + ")")
 
                 except ValueError:
                     print("The value must be one or more string:", value)
