@@ -37,6 +37,29 @@ def search_users_by_id(dataset_path: str, users: list):
 
     return result.sort(result["userId"].asc())
 
+# read movies.csv and ratings.csv from the dataset_path and create a new dataset consists of movie names with highest
+# rating.
+# movie rating is calculated by adding all ratings from ratings.csv.
+# return the dataset
+def list_movies_by_rating(dataset_path: str, n: int):
+    # set local[*] to utilize all cores
+    spark_session = SparkSession.builder.master("local[*]").appName("App").getOrCreate()
+
+    ratings_dataset = spark_session.read.options(header='True').csv(dataset_path + "ratings.csv")
+    movies_dataset = spark_session.read.options(header='True').csv(dataset_path + "movies.csv")
+
+    # cast String type column 'rating' to integer type for calculation
+    ratings_dataset = ratings_dataset.withColumn("rating", ratings_dataset["rating"].cast("int"))
+
+    result = ratings_dataset.groupBy("movieId") \
+        .sum("rating") \
+        .join(movies_dataset, ratings_dataset["movieId"] == movies_dataset["movieId"])
+
+    result = result.sort(result["sum(rating)"].desc()) \
+        .limit(n)
+
+    return result.select(col("title"), col("sum(rating)"))
+
 
 # number of watches = count(movieId) from ratings.csv
 def list_movies_by_watches(dataset_path: str, n: int):
