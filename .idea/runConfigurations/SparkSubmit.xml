@@ -4,7 +4,7 @@
     <option name="archives">
       <list />
     </option>
-    <option name="artifactArgs" value="-compare-movie-tastes 125,161" />
+    <option name="artifactArgs" value="-compare-movie-tastes 125,165" />
     <option name="artifactPath">
       <FilePath>
         <option name="path" value="$PROJECT_DIR$/src/main.py" />
@@ -46,6 +46,7 @@
     <option name="numExecutors" value="" />
     <option name="packages" value="" />
     <option name="principal" value="" />
+    <option name="projectPathOnTarget" />
     <option name="propertiesFile">
       <FilePath>
         <option name="path" value="" />

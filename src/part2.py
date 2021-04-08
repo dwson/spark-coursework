@@ -20,8 +20,7 @@ def compare_movie_tastes(dataset_path: str, users: list):
 
         result = user0_tags_dataset.union(user1_tags_dataset)
 
-        # TODO make this work
-        return result.withColumnRenamed("concat_ws(, , collect_list(tag)", "tags")
+        return result.withColumnRenamed("concat_ws(, , collect_list(tag))", "movieTastes")
     else:
         print("Not enough user data")
         print("Number of tags of user", users[0], ':', user0_tags_dataset.count())
