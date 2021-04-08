@@ -4,12 +4,10 @@ import os
 import part1
 import part2
 
-from pyspark import SparkConf, SparkContext
-from pyspark.sql import SparkSession
 from datetime import datetime
 
-# DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest/" # large one
-DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest-small/"  # small one
+DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest/" # large one
+# DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest-small/"  # small one
 OUTPUT_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../output/"
 
 AVAILABLE_ARGS = ["-search-user-id", "-search-movie-id", "-search-movie-title", "-search-genre", "-search-year",
