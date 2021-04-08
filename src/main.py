@@ -6,8 +6,8 @@ import part2
 
 from datetime import datetime
 
-DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest/"  # large one
-# DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest-small/"  # small one
+# DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest/"  # large one
+DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest-small/"  # small one
 OUTPUT_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../output/"
 
 AVAILABLE_ARGS = ["-search-user-id", "-search-movie-id", "-search-movie-title", "-search-genre", "-search-year",
@@ -52,7 +52,21 @@ def main():
             print("Argument:", arg, value)
 
             if "search_user_id" in arg:
-                None  # TODO
+                try:
+                    users = value.split(',')
+
+                    # type check
+                    if is_every_element_int(users):
+                        result = part1.search_users_by_id(DATASET_PATH, users)
+
+                        if result is not None:
+                            result.show(truncate=True)
+                            store_dataset(result, arg + '-' + value)
+                    else:
+                        raise ValueError
+                except ValueError:
+                    print("The value must be one or more numbers separated by a comma:", value)
+                    print("e.g., -search-user-id 1,2,5")
             elif "search_movie_id" in arg:
                 None  # TODO
             elif "search_movie_title" in arg:
