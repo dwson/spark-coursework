@@ -45,12 +45,15 @@ def search_movie_by_id(dataset_path: str, n: int):
     spark_session = SparkSession.builder.master("local[*]").appName("App").getOrCreate()
 
     ratings_dataset = spark_session.read.options(header='True').csv(dataset_path + "ratings.csv")
+    movies_dataset = spark_session.read.options(header='True').csv(dataset_path + "movies.csv")
 
     # cast String type column 'rating' to double type for calculation
     ratings_dataset = ratings_dataset.withColumn("rating", ratings_dataset["rating"].cast("double"))
 
     result = ratings_dataset.where(col("movieId") == n) \
-        .groupBy("movieId").agg(round(avg("rating"), 2).alias("avgRating"), count("rating").alias("numWatched"))
+        .join(movies_dataset, "movieId") \
+        .groupBy("movieId", "title") \
+        .agg(round(avg("rating"), 2).alias("avgRating"), count("rating").alias("numWatched"))
 
     return result
 

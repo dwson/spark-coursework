@@ -4,7 +4,7 @@
     <option name="archives">
       <list />
     </option>
-    <option name="artifactArgs" value="-search-movie-title &quot;toy&quot;" />
+    <option name="artifactArgs" value="-search-movie-id 1" />
     <option name="artifactPath">
       <FilePath>
         <option name="path" value="$PROJECT_DIR$/src/main.py" />
