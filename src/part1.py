@@ -58,6 +58,7 @@ def search_movie_by_id(dataset_path: str, n: int):
     return result
 
 
+# all the movies containing the given string are searched
 # number of watches = count(rating), average of rating = avg(rating) from ratings.csv
 # average of rating is rounded to 2 decimal places
 def search_movie_by_title(dataset_path: str, title: str):
