@@ -6,7 +6,7 @@ import part2
 
 from datetime import datetime
 
-DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest/" # large one
+DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest/"  # large one
 # DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest-small/"  # small one
 OUTPUT_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../output/"
 
@@ -78,7 +78,22 @@ def main():
                     print("The value must be a number:", value)
                     print("e.g., -list-watches 10")
             elif "find_favourite_genre" in arg:
-                None  # TODO
+                try:
+                    users = value.split(',')
+
+                    # allows a user or a group of users
+                    if len(users) > 0 and is_every_element_int(users):
+                        result = part2.find_favourite_genre(DATASET_PATH, users)
+
+                        if result is not None:
+                            result.show(truncate=False)
+                            store_dataset(result, arg + '-' + value)
+                    else:
+                        raise ValueError
+                except ValueError:
+                    print("The value must be a number or numbers separated by a comma:", value)
+                    print("e.g., -find-favourite-genre 1")
+                    print("e.g., -find-favourite-genre 1,2,3")
             elif "compare_movie_tastes" in arg:
                 try:
                     users = value.split(',')

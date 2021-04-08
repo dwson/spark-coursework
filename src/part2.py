@@ -4,6 +4,11 @@ from pyspark.sql.functions import concat_ws
 from pyspark.sql.functions import collect_list
 
 
+def find_favourite_genre(dataset_path: str, users: list):
+    # set local[*] to utilize all cores
+    spark_session = SparkSession.builder.master("local[*]").appName("App").getOrCreate()
+
+
 def compare_movie_tastes(dataset_path: str, users: list):
     # set local[*] to utilize all cores
     spark_session = SparkSession.builder.master("local[*]").appName("App").getOrCreate()
