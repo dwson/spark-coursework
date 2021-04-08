@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, explode, split, avg, count, round
+from pyspark.sql.functions import col, explode, split, avg, count, round, lower
 
 
 # read movies.csv and ratings.csv from the dataset_path and create a new dataset consists of users id with number of
@@ -53,6 +53,27 @@ def search_movie_by_id(dataset_path: str, n: int):
         .groupBy("movieId").agg(round(avg("rating"), 2).alias("avgRating"), count("rating").alias("numWatched"))
 
     return result
+
+
+# number of watches = count(rating), average of rating = avg(rating) from ratings.csv
+# average of rating is rounded to 2 decimal places
+def search_movie_by_title(dataset_path: str, title: str):
+    # set local[*] to utilize all cores
+    spark_session = SparkSession.builder.master("local[*]").appName("App").getOrCreate()
+
+    ratings_dataset = spark_session.read.options(header='True').csv(dataset_path + "ratings.csv")
+    movies_dataset = spark_session.read.options(header='True').csv(dataset_path + "movies.csv")
+
+    # cast String type column 'rating' to double type for calculation
+    ratings_dataset = ratings_dataset.withColumn("rating", ratings_dataset["rating"].cast("double"))
+
+    filtered_movies_dataset = movies_dataset.filter(lower(movies_dataset.title).like("%" + title + "%"))
+    filtered_movies_ratings_dataset = filtered_movies_dataset.join(ratings_dataset, "movieId")
+
+    result = filtered_movies_ratings_dataset.groupBy("movieId", "title") \
+        .agg(round(avg("rating"), 2).alias("avgRating"), count("rating").alias("numWatched"))
+
+    return result.sort(result["movieId"].asc())
 
 
 # read movies.csv and ratings.csv from the dataset_path and create a new dataset consists of movie names with highest
