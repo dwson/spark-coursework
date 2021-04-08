@@ -84,7 +84,23 @@ def main():
                     print("The value must be a single string:", value)
                     print("e.g., -search-movie-title \"toy story\"")
             elif "search_genre" in arg:
-                None  # TODO
+                try:
+                    genres = value.split(',')
+
+                    results = part1.search_genre(DATASET_PATH, genres)
+
+                    list_of_genre = results[0]
+                    dataset_by_genre = results[1]
+
+                    for i in range(len(list_of_genre)):
+                        print("Genre: ", list_of_genre[i])
+                        dataset_by_genre[i].show(truncate=False)
+                        # TODO: is storing without genre ok?
+                        store_dataset(dataset_by_genre[i], arg + '-' + value)
+
+                except ValueError:
+                    print("The value must be one or more string:", value)
+                    print("e.g., -search-movie-title Adventure,Animation")
             elif "search_year" in arg:
                 None  # TODO
             elif "list_rating" in arg:
