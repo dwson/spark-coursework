@@ -4,7 +4,11 @@
     <option name="archives">
       <list />
     </option>
+<<<<<<< HEAD
     <option name="artifactArgs" value="-find-favourite-genre 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20" />
+=======
+    <option name="artifactArgs" value="-search-movie-id 1" />
+>>>>>>> 4e08366c6ac7ff7f3113c67e2e408f19b7514558
     <option name="artifactPath">
       <FilePath>
         <option name="path" value="$PROJECT_DIR$/src/main.py" />

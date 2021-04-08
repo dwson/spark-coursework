@@ -60,7 +60,7 @@ def main():
                         result = part1.search_users_by_id(DATASET_PATH, users)
 
                         if result is not None:
-                            result.show(truncate=True)
+                            result.show(truncate=False)
                             store_dataset(result, arg + '-' + value)
                     else:
                         raise ValueError
@@ -76,7 +76,13 @@ def main():
                     print("The value must be a number:", value)
                     print("e.g., -search-movie-id 10")
             elif "search_movie_title" in arg:
-                None  # TODO
+                try:
+                    result = part1.search_movie_by_title(DATASET_PATH, value)
+                    result.show(truncate=False)
+                    store_dataset(result, arg + '-' + value)
+                except ValueError:
+                    print("The value must be a single string:", value)
+                    print("e.g., -search-movie-title \"toy story\"")
             elif "search_genre" in arg:
                 None  # TODO
             elif "search_year" in arg:
