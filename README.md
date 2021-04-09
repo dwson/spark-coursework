@@ -25,10 +25,10 @@ It will print usage message if a given argument is wrong.
 ### Available options:
 <Part 1>
 ```
--search-user-id      <>
--search-movie-id     <>
--search-movie-title  <>
--search-genre        <>
+-search-user-id      <userId || group of userIds>
+-search-movie-id     <movieId>
+-search-movie-title  <title>
+-search-genre        <genre || group of genres>
 -search-year         <YYYY>
 -list-rating         <Number>
 -list-watches        <Number>
@@ -42,13 +42,18 @@ It will print usage message if a given argument is wrong.
 
 The group of values should be delimited by commas.
 
+The search functions are case-insensitive.
+
 ### Examples:
 <Part 1>
 ```
-spark-3.1.1-bin-hadoop3.2/bin/spark-submit src/main.py -search-user-id 
-spark-3.1.1-bin-hadoop3.2/bin/spark-submit src/main.py -search-movie-id
-spark-3.1.1-bin-hadoop3.2/bin/spark-submit src/main.py -search-movie-title
-spark-3.1.1-bin-hadoop3.2/bin/spark-submit src/main.py -search-genre 
+spark-3.1.1-bin-hadoop3.2/bin/spark-submit src/main.py -search-user-id 25
+spark-3.1.1-bin-hadoop3.2/bin/spark-submit src/main.py -search-user-id 1,25,4
+spark-3.1.1-bin-hadoop3.2/bin/spark-submit src/main.py -search-movie-id 12
+spark-3.1.1-bin-hadoop3.2/bin/spark-submit src/main.py -search-movie-title "toy"
+spark-3.1.1-bin-hadoop3.2/bin/spark-submit src/main.py -search-movie-title "toy story"
+spark-3.1.1-bin-hadoop3.2/bin/spark-submit src/main.py -search-genre Adventure
+spark-3.1.1-bin-hadoop3.2/bin/spark-submit src/main.py -search-genre adventure,Romance,Comedy
 spark-3.1.1-bin-hadoop3.2/bin/spark-submit src/main.py -search-year 2018
 spark-3.1.1-bin-hadoop3.2/bin/spark-submit src/main.py -list-rating 10
 spark-3.1.1-bin-hadoop3.2/bin/spark-submit src/main.py -list-watches 10
