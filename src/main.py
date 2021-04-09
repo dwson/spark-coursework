@@ -6,8 +6,8 @@ import part2
 
 from datetime import datetime
 
-# DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest/"  # large one
-DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest-small/"  # small one
+DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest/"  # large one
+# DATASET_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../ml-latest-small/"  # small one
 OUTPUT_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../output/"
 
 AVAILABLE_ARGS = ["-search-user-id", "-search-movie-id", "-search-movie-title", "-search-genre", "-search-year",
@@ -26,7 +26,7 @@ def store_dataset(dataset, filename):
     """
     file_path = OUTPUT_PATH + datetime.today().strftime("%d.%m.%Y-%H:%M:%S-") + filename
     dataset.write.option("header", "true").csv(file_path)
-    print("Result saved in " + file_path)
+    print("The result saved in " + file_path)
 
 
 def is_every_element_int(var):
