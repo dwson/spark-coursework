@@ -1,10 +1,22 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import concat_ws
 from pyspark.sql.functions import collect_list
-from pyspark.sql.functions import col, explode, split, avg, count, round
+from pyspark.sql.functions import col
+from pyspark.sql.functions import explode
+from pyspark.sql.functions import split
 
 
 def find_favourite_genre(dataset_path: str, users: list):
+    """
+    Finds the favourite genre of a given user or a group of users.
+
+    The favourite genre is calculated by counting the number of occurrences of a genre that the given user(s) rated.
+    The genre with the highest occurrence will be selected.
+
+    :param dataset_path: The path of the dataset
+    :param users: The list of users
+    :return: The dataset
+    """
     # set local[*] to utilize all cores
     spark_session = SparkSession.builder.master("local[*]").appName("App").getOrCreate()
 
@@ -32,6 +44,9 @@ def find_favourite_genre(dataset_path: str, users: list):
 
 
 def compare_movie_tastes(dataset_path: str, users: list):
+    """
+
+    """
     # set local[*] to utilize all cores
     spark_session = SparkSession.builder.master("local[*]").appName("App").getOrCreate()
 
