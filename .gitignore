@@ -3,3 +3,4 @@ ml-latest-small
 output
 __pycache__
 .idea
+venv
