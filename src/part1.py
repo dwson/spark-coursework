@@ -98,7 +98,8 @@ def search_genre(dataset_path: str, genres: list):
     filtered_genre_dataset = split_genre_dataset.filter(col("genres").isin(genres))
 
     list_of_genres = filtered_genre_dataset.select("genres").distinct().rdd.flatMap(lambda x: x).collect()
-    genre_datasets_array = [filtered_genre_dataset.where(filtered_genre_dataset["genres"] == genre) for genre in list_of_genres]
+    genre_datasets_array = [filtered_genre_dataset.where(filtered_genre_dataset["genres"] == genre) for genre in
+                            list_of_genres]
 
     for i in range(len(genre_datasets_array)):
         genre_datasets_array[i] = genre_datasets_array[i].drop("genres")
@@ -106,6 +107,23 @@ def search_genre(dataset_path: str, genres: list):
     result = [list_of_genres, genre_datasets_array]
 
     return result
+
+
+# all the movies containing the given string are searched
+# number of watches = count(rating), average of rating = avg(rating) from ratings.csv
+# average of rating is rounded to 2 decimal places
+def search_movie_by_year(dataset_path: str, year: str):
+    # set local[*] to utilize all cores
+    spark_session = SparkSession.builder.master("local[*]").appName("App").getOrCreate()
+
+    movies_dataset = spark_session.read.options(header='True').csv(dataset_path + "movies.csv")
+
+    result = movies_dataset \
+        .filter(lower(movies_dataset.title).like("%(" + year + ")%")) \
+        .select("movieId", "title")
+    # result = filtered_movies_by_year_dataset.groupBy("movieId", "title")
+
+    return result.sort(result["movieId"].asc())
 
 
 # read movies.csv and ratings.csv from the dataset_path and create a new dataset consists of movie names with highest

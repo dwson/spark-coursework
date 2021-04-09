@@ -101,7 +101,16 @@ def main():
                     print("The value must be one or more string:", value)
                     print("e.g., -search-movie-title Adventure,Animation")
             elif "search_year" in arg:
-                None  # TODO
+                try:
+                    if len(value) == 4:
+                        result = part1.search_movie_by_year(DATASET_PATH, value)
+                        result.show(truncate=False)
+                        store_dataset(result, arg + '-' + value)
+                    else:
+                        raise ValueError
+                except ValueError:
+                    print("The value must be a year (4 digit number):", value)
+                    print("e.g., -search-year 1994")
             elif "list_rating" in arg:
                 try:
                     result = part1.list_movies_by_rating(DATASET_PATH, int(value))
