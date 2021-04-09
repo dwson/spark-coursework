@@ -16,15 +16,26 @@ AVAILABLE_ARGS = ["-search-user-id", "-search-movie-id", "-search-movie-title", 
 USAGE = "spark-submit main.py {[OPTIONS] <value>}"
 
 
-# Store a given dataset into OUTPUT_PATH with a current timestamp
-# e.g., 01.04.2021-19:42:28 -search-user-id 1,2,3
 def store_dataset(dataset, filename):
+    """
+    Stores a given dataset into OUTPUT_PATH with a current timestamp using a built-in function in Apache Spark.
+
+    :param dataset: The dataset to store
+    :param filename: The filename
+    :return: Nothing
+    """
     file_path = OUTPUT_PATH + datetime.today().strftime("%d.%m.%Y-%H:%M:%S-") + filename
     dataset.write.option("header", "true").csv(file_path)
     print("Result saved in " + file_path)
 
 
 def is_every_element_int(var):
+    """
+    Check if all elements in a given variable are integers.
+
+    :param var: The variable to check
+    :return: True if all elements are integer, False if any element is not an integer.
+    """
     try:
         for element in var:
             int(element)
@@ -34,16 +45,18 @@ def is_every_element_int(var):
 
 
 def main():
+    """
+    This is the main function responsible for checking command-line arguments and calling appropriate functions.
+    This function will print the dataset(result) generated from the callee function and store it in the OUTPUT_PATH.
+
+    :return: Nothing
+    """
     parser = argparse.ArgumentParser(usage=USAGE)
 
     for arg in AVAILABLE_ARGS:
         parser.add_argument(arg)
 
     args = parser.parse_args()
-
-    # we've decided to use SparkSession instead of SparkContext because it's newer and supports more methods
-    # spark_session = SparkSession.builder.master("local").appName("App").getOrCreate()
-    # dataset = spark_session.read.csv(DATASET_PATH + "links.csv")
 
     for arg in vars(args):
         value = getattr(args, arg)
