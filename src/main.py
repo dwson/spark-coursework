@@ -99,7 +99,7 @@ def main():
 
                 except ValueError:
                     print("The value must be one or more string:", value)
-                    print("e.g., -search-movie-title Adventure,Animation")
+                    print("e.g., -search-genre Adventure,Animation")
             elif "search_year" in arg:
                 try:
                     if len(value) == 4:

@@ -30,12 +30,9 @@ def search_users_by_id(dataset_path: str, users: list):
         .count() \
         .withColumnRenamed("count", "numOfGenres")
 
-    # get all genres user watched
-    # genres_count_result.sort(genres_count_result["userId"].asc())
-
     result = movies_count_result.join(genres_count_result, "userId")
 
-    return result.sort(result["userId"].asc())
+    return result.sort(result["userId"].cast("int").asc())
 
 
 # number of watches = count(rating), average of rating = avg(rating) from ratings.csv
@@ -71,13 +68,13 @@ def search_movie_by_title(dataset_path: str, title: str):
     # cast String type column 'rating' to double type for calculation
     ratings_dataset = ratings_dataset.withColumn("rating", ratings_dataset["rating"].cast("double"))
 
-    filtered_movies_dataset = movies_dataset.filter(lower(movies_dataset.title).like("%" + title + "%"))
+    filtered_movies_dataset = movies_dataset.filter(lower(movies_dataset.title).like("%" + title.lower() + "%"))
     filtered_movies_ratings_dataset = filtered_movies_dataset.join(ratings_dataset, "movieId")
 
     result = filtered_movies_ratings_dataset.groupBy("movieId", "title") \
         .agg(round(avg("rating"), 2).alias("avgRating"), count("rating").alias("numWatched"))
 
-    return result.sort(result["movieId"].asc())
+    return result.sort(result["movieId"].cast("int").asc())
 
 
 # TODO: commit needs to change
@@ -89,13 +86,14 @@ def search_genre(dataset_path: str, genres: list):
     spark_session = SparkSession.builder.master("local[*]").appName("App").getOrCreate()
 
     movies_dataset = spark_session.read.options(header='True').csv(dataset_path + "movies.csv")
+    genres_lowercase = [genre.lower() for genre in genres]
 
     # split genres of each movie
     split_genre_dataset = movies_dataset.select("movieId", "title", "genres") \
         .withColumn("genres", explode(split(col("genres"), "\\|")))
 
     # filter to get data of given genres
-    filtered_genre_dataset = split_genre_dataset.filter(col("genres").isin(genres))
+    filtered_genre_dataset = split_genre_dataset.filter(lower(col("genres")).isin(genres_lowercase))
 
     list_of_genres = filtered_genre_dataset.select("genres").distinct().rdd.flatMap(lambda x: x).collect()
     genre_datasets_array = [filtered_genre_dataset.where(filtered_genre_dataset["genres"] == genre) for genre in
