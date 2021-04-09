@@ -17,20 +17,19 @@ def find_favourite_genre(dataset_path: str, users: list):
     :param users: The list of users
     :return: The dataset
     """
-    # set local[*] to utilize all cores
+    # set Spark local[*] to utilize all cores
     spark_session = SparkSession.builder.master("local[*]").appName("App").getOrCreate()
 
     ratings_dataset = spark_session.read.options(header='True').csv(dataset_path + "ratings.csv")
     movies_dataset = spark_session.read.options(header='True').csv(dataset_path + "movies.csv")
 
-    # filter dataset to get watched movie data of requested users and count the number of movies
     ratings_of_the_users = ratings_dataset.select("userId", "movieId").filter(col("userId").isin(users))
 
-    # split genres of each movie
+    # split genres
     genres_dataset = movies_dataset.select("movieId", "genres") \
         .withColumn("genres", explode(split(col("genres"), "\\|")))
 
-    # filter unselected movies
+    # filter unrelated movies
     genres_dataset = genres_dataset.join(ratings_of_the_users,
                                          genres_dataset["movieId"] == ratings_of_the_users["movieId"],
                                          "leftsemi") \
@@ -45,9 +44,16 @@ def find_favourite_genre(dataset_path: str, users: list):
 
 def compare_movie_tastes(dataset_path: str, users: list):
     """
+    Finds the tags of given users.
 
+    We assumed "movie tastes" means tags.
+    This function will find given users from tags.csv and summarize their tags in a single data frame.
+
+    :param dataset_path: The path of the dataset
+    :param users: The list of users
+    :return: The dataset
     """
-    # set local[*] to utilize all cores
+    # set Spark local[*] to utilize all cores
     spark_session = SparkSession.builder.master("local[*]").appName("App").getOrCreate()
 
     tags_dataset = spark_session.read.options(header='True').csv(dataset_path + "tags.csv")
