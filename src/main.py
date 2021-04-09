@@ -102,20 +102,22 @@ def main():
 
                     results = part1.search_genre(DATASET_PATH, genres)
 
+                    # split results to list of genre and datasets for each genre
                     list_of_genre = results[0]
                     dataset_by_genre = results[1]
 
+                    # show result for each genre to the user and store each dataset
                     for i in range(len(list_of_genre)):
                         print("Genre: ", list_of_genre[i])
                         dataset_by_genre[i].show(truncate=False)
                         store_dataset(dataset_by_genre[i], arg + '-' + value + " (" + list_of_genre[i] + ")")
-
                 except ValueError:
                     print("The value must be one or more string:", value)
                     print("e.g., -search-genre Adventure,Animation")
             elif "search_year" in arg:
                 try:
-                    if len(value) == 4:
+                    # check the value is format of YYYY
+                    if len(value) == 4 and value.isnumeric():
                         result = part1.search_movie_by_year(DATASET_PATH, value)
                         result.show(truncate=False)
                         store_dataset(result, arg + '-' + value)
